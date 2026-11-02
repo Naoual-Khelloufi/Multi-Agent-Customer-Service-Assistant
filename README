@@ -1,4 +1,4 @@
-# Multi-Agent Customer Service Assistant
+### Multi-Agent Customer Service Assistant
 
 **An AI-powered assistant for customer service agents, built with Retrieval-Augmented Generation (RAG) and LangGraph.**
 
@@ -222,10 +222,4 @@ The mock workflow does not consume Groq API quota. The real workflow requires a 
 
 ---
 
-## Important Note
-
-The Validation Agent currently performs basic structural and consistency checks. A successful validation status does **not** guarantee that the generated answer is factually accurate or fully grounded in the retrieved documents.
-
----
-
-**Developed as an AI engineering project exploring RAG pipelines, multi-agent orchestration, and LLM-powered applications.**
+**Note:** The validation agent currently performs basic consistency checks; it does not guarantee factual accuracy.
