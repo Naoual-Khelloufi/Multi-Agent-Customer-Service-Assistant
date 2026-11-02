@@ -184,6 +184,7 @@ python -m test.test_ingestion
 python -m test.test_retrieval_agent
 python -m test.test_workflow_mock
 ...
+```
 ---
 
 ## Limitations & Future Improvements
