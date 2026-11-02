@@ -1,103 +1,143 @@
 # Multi-Agent Customer Service Assistant
 
-An AI-powered customer service assistant built using **Retrieval-Augmented Generation (RAG)** and **LangGraph**. It helps customer service agents find relevant information and obtain contextual answers from a dedicated knowledge base.
+**An AI-powered assistant for customer service agents, built with Retrieval-Augmented Generation (RAG) and LangGraph.**
 
-## 1. Project Context
+The application retrieves relevant information from a dedicated knowledge base and generates contextual answers to support customer service operations.
 
-Customer service agents regularly handle complaints, difficult interactions, communication challenges, and customer satisfaction issues.
+---
 
-This project aims to simplify access to practical guidance by allowing agents to ask questions in natural language and receive answers based on a collection of customer service documents.
+## Overview
 
-The knowledge base covers:
-- Customer Service Fundamentals
-- Call Handling Procedures
-- Complaint and Conflict Management
-- Stress and Emotional Management
-- Professional Communication
-- Quality Assurance and Performance
-- Workplace Ethics and Discipline
+Customer service agents regularly deal with complaints, difficult interactions, communication challenges, and customer satisfaction issues.
 
-## 2. Architecture
+This project aims to simplify access to practical guidance by allowing agents to ask questions in natural language and receive answers grounded in a collection of customer service documents.
 
-The application uses four specialized agents orchestrated through LangGraph:
+### Knowledge Base
+
+The system currently covers seven main topics:
+
+| # | Document |
+|:---:|---|
+| 01 | Customer Service Fundamentals |
+| 02 | Call Handling Procedures |
+| 03 | Complaint and Conflict Management |
+| 04 | Stress and Emotional Management |
+| 05 | Professional Communication Skills |
+| 06 | Quality Assurance and Performance |
+| 07 | Workplace Ethics and Discipline |
+
+---
+
+## Architecture
+
+The application follows a **multi-agent architecture** orchestrated with LangGraph. Each agent has a specialized responsibility within the RAG pipeline.
+
+### Agent Components
 
 | Agent | Responsibility |
 |---|---|
-| Supervisor | Checks and routes user questions. |
-| Retrieval | Retrieves relevant information from ChromaDB. |
-| Answer | Generates contextual answers using the Groq API. |
-| Validation | Performs basic answer and context checks. |
+| **Supervisor Agent** | Checks incoming questions and controls workflow routing. |
+| **Retrieval Agent** | Searches the knowledge base for relevant information using ChromaDB. |
+| **Answer Agent** | Generates contextual answers using the Groq API. |
+| **Validation Agent** | Performs basic checks on the generated answer and retrieved context. |
 
 ### RAG Workflow
 
 ```mermaid
 flowchart TD
-    A[User Question] --> B[Supervisor Agent]
-    B --> C[Retrieval Agent]
-    C --> D[ChromaDB]
-    D --> E[Answer Agent]
-    E --> F[Groq LLM]
-    F --> G[Validation Agent]
-    G --> H[Final Answer]
+    A["User Question"] --> B["Supervisor Agent"]
+    B --> C["Retrieval Agent"]
+    C --> D[("ChromaDB")]
+    D --> E["Answer Agent"]
+    E --> F["Groq LLM"]
+    F --> G["Validation Agent"]
+    G --> H["Final Answer"]
+
+    style A fill:#E8F1FF,stroke:#3973B9,color:#17365D
+    style D fill:#E9F7EF,stroke:#3A9360,color:#174D32
+    style F fill:#FFF2DF,stroke:#D99A32,color:#704600
+    style H fill:#E9F7EF,stroke:#3A9360,color:#174D32
 ```
 
-## 3. Technology Stack
+---
 
-| Technology | Purpose |
+## Technology Stack
+
+| Technology | Role |
 |---|---|
-| Python | Main programming language |
-| LangGraph | Agent orchestration |
-| LangChain | Document processing |
-| Sentence Transformers | Text embeddings |
-| multilingual-e5-small | Embedding model |
-| ChromaDB | Vector database |
-| Groq API | LLM inference |
-| Streamlit | User interface |
+| **Python 3.11** | Main programming language |
+| **LangGraph** | Multi-agent workflow orchestration |
+| **LangChain** | Document processing and RAG components |
+| **Sentence Transformers** | Text embedding generation |
+| **Multilingual E5 Small** | Embedding model |
+| **ChromaDB** | Vector database and semantic search |
+| **Groq API** | Remote LLM inference |
+| **Streamlit** | Web application interface |
 
-**Architecture choice:** Document processing, embeddings, and retrieval run locally. Answer generation uses the Groq API, avoiding the need to run a large language model on the local machine.
+### Architecture Approach
 
-## 4. Project Structure
+The project uses a **hybrid architecture**:
+
+- **Local processing:** document loading, text chunking, embedding generation, vector storage, and retrieval.
+- **Remote inference:** answer generation through the Groq API.
+
+This approach reduces local hardware requirements by avoiding the need to run a large language model on the development machine.
+
+---
+
+## Project Structure
 
 ```text
+Multi-Agent-Customer-Service-Assistant/
+│
 ├── data/
-│   ├── raw/              # Source documents
-│   └── processed/
-├── vectorstore/          # ChromaDB storage
+│   ├── raw/                  # Source documents
+│   └── processed/            # Processed documents
+│
+├── vectorstore/              # Persistent ChromaDB storage
+│
 ├── src/
-│   ├── ingestion/        # Document loading and chunking
-│   ├── retrieval/        # Embeddings and vector search
-│   ├── agents/           # Specialized agents
-│   ├── graph/            # LangGraph workflow and state
-│   └── config.py
-├── test/                 # Component and workflow tests
-├── app.py                # Streamlit application
-├── requirements.txt
-├── .env.example
+│   ├── ingestion/            # Document loading and chunking
+│   ├── retrieval/             # Embeddings and vector search
+│   ├── agents/                # Specialized agents
+│   ├── graph/                 # LangGraph workflow and state
+│   └── config.py              # Project configuration
+│
+├── test/                      # Component and workflow tests
+│
+├── app.py                     # Streamlit application
+├── requirements.txt           # Python dependencies
+├── .env.example               # Environment variable template
 ├── .gitignore
 └── README.md
 ```
 
-## 5. Installation and Execution
+---
+
+## Getting Started
 
 ### Prerequisites
+
 - Python 3.11
 - Git
-- Groq API key
+- A Groq API key
+- Internet connection (for model downloads and API inference)
 
 ### 1. Clone the repository
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/Multi-Agent-Customer-Service-Assistant.git
+
 cd Multi-Agent-Customer-Service-Assistant
 ```
 
-### 2. Create and activate a virtual environment
+### 2. Create a virtual environment
 
 ```bash
 python -m venv .venv
 ```
 
-Windows PowerShell:
+Activate it on Windows PowerShell:
 
 ```powershell
 .venv\Scripts\Activate.ps1
@@ -109,41 +149,49 @@ Windows PowerShell:
 pip install -r requirements.txt
 ```
 
-### 4. Configure the API key
+### 4. Configure environment variables
 
-Create a `.env` file in the project root:
+Create a `.env` file in the project root and add your Groq API key:
 
 ```env
 GROQ_API_KEY=your_groq_api_key
 ```
 
-Get an API key from [Groq Console](https://console.groq.com/).
+Get your API key from the [Groq Console](https://console.groq.com/).
 
-**Important:** Never share or commit your `.env` file. The API key must remain private.
+> **Security:** Never commit your `.env` file or expose your API key. Use `.env.example` as a template.
 
 ### 5. Build the vector database
+
+Place the source Word documents in `data/raw/`, then run:
 
 ```bash
 python -m test.test_vector_store
 ```
 
-This command loads the Word documents, generates embeddings, and stores them in ChromaDB.
+This step builds the vector database from the source documents using the project's ingestion and embedding pipeline.
 
-The first execution downloads the embedding model and requires an internet connection.
+The first execution may download the embedding model and therefore requires an internet connection.
 
-### 6. Run the application
+### 6. Launch the application
 
 ```bash
 streamlit run app.py
 ```
 
-Open `http://localhost:8501` in your browser.
+Open the application in your browser:
 
-## 6. Testing
+```text
+http://localhost:8501
+```
 
-Individual components and workflow tests are available in the `test/` directory.
+---
 
-Example:
+## Testing
+
+The `test/` directory contains tests for individual components and the complete workflow.
+
+Run individual tests from the project root:
 
 ```bash
 python -m test.test_ingestion
@@ -152,16 +200,32 @@ python -m test.test_workflow_mock
 python -m test.test_real_workflow
 ```
 
-The mock workflow test does not consume Groq API quota. The real workflow test uses the actual retrieval pipeline and Groq API.
+**Testing strategy:**
 
-## 7. Limitations and Future Improvements
+- **Component tests:** verify document ingestion, retrieval, and individual agent behavior.
+- **Mock workflow:** checks workflow orchestration without calling the Groq API.
+- **Real workflow:** tests the complete pipeline, including retrieval and LLM generation.
 
-- Improve retrieval accuracy and answer evaluation.
-- Add conversation history for multi-turn interactions.
-- Support PDF and additional document formats.
-- Introduce more advanced agent routing and decision-making.
-- Add automated evaluation metrics for retrieval and generation.
+The mock workflow does not consume Groq API quota. The real workflow requires a valid API key and may consume API quota.
 
 ---
 
-**Note:** The validation agent currently performs basic consistency checks; it does not guarantee factual accuracy.
+## Limitations & Future Improvements
+
+| Current limitation | Potential improvement |
+|---|---|
+| Retrieval accuracy needs further evaluation | Introduce retrieval metrics such as Recall@K and Precision@K |
+| No conversation history | Add multi-turn conversation support |
+| Limited document formats | Support PDF and additional formats |
+| Basic validation mechanism | Implement factual grounding and answer evaluation |
+| Basic agent routing | Introduce more advanced routing and decision-making |
+
+---
+
+## Important Note
+
+The Validation Agent currently performs basic structural and consistency checks. A successful validation status does **not** guarantee that the generated answer is factually accurate or fully grounded in the retrieved documents.
+
+---
+
+**Developed as an AI engineering project exploring RAG pipelines, multi-agent orchestration, and LLM-powered applications.**
