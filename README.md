@@ -171,20 +171,19 @@ Multi-Agent-Customer-Service-Assistant/
 ## Testing
 
 The `test/` directory contains tests for individual components and the complete workflow.
+Testing covers the following areas:
+- **Document Ingestion:** Verifies document loading, text extraction, and chunking.
+- **Embeddings & Vector Store:** Checks embedding generation, document indexing, and vector storage.
+- **Retrieval:** Evaluates the system's ability to retrieve relevant information from the knowledge base.
+- **Agents:** Tests each agent's individual responsibilities, including question routing, answer generation, and validation.
+- **Workflow:** Verifies the execution and coordination of all agents through LangGraph.
 
 Run individual tests from the project root:
 ```bash
 python -m test.test_ingestion
 python -m test.test_retrieval_agent
 python -m test.test_workflow_mock
-python -m test.test_real_workflow
-```
-
-### Testing Strategy
-- **Component tests:** Verify document ingestion, retrieval, and individual agent behavior.
-- **Mock workflow:** Checks workflow orchestration without calling the Groq API (does not consume API quota).
-- **Real workflow:** Tests the complete pipeline, including retrieval and LLM generation (requires a valid API key).
-
+...
 ---
 
 ## Limitations & Future Improvements
