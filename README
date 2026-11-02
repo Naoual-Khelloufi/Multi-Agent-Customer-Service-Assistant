@@ -1,4 +1,4 @@
-# Multi-Agent Customer Service Assistant
+### Multi-Agent Customer Service Assistant
 
 An AI-powered customer service assistant built using **Retrieval-Augmented Generation (RAG)** and **LangGraph**. It helps customer service agents find relevant information and obtain contextual answers from a dedicated knowledge base.
 
